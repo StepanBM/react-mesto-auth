@@ -155,28 +155,25 @@ function App() {
   }
 
   React.useEffect(() => {
-    setIsLoggedIn(true);
-    api
-      .getUserInfo()
-      .then((user) => {
-        setCurrentUser(user);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    setIsLoggedIn(true);
-    api
-      .getInitialCards()
-      .then((card) => {
-        setCurrentCards(card);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setIsLoggedIn(false);
-      });
-  }, []);
+    if (isLoggedIn === true) {
+      api
+        .getUserInfo()
+        .then((user) => {
+          setCurrentUser(user);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      api
+        .getInitialCards()
+        .then((card) => {
+          setCurrentCards(card);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [isLoggedIn]);
 
   function handleCardDelete(cards) {
     api
