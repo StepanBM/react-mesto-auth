@@ -10,9 +10,8 @@ import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
 import DeleteCardPopup from "./DeleteCardPopup.js";
 import api from "../utils/Api.js";
-import "../index.css";
 
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Register from "./Register";
 import ProtectedRouteElement from "./ProtectedRoute";
@@ -40,7 +39,7 @@ function App() {
   //Данные карточек
   const [currentCards, setCurrentCards] = React.useState([]);
   //Данные карточки для удаления
-  const [currentDeleteCards, setCurrentDeleteCards] = React.useState({});
+  const [currentDeleteCard, setCurrentDeleteCard] = React.useState({});
   //Изначальное состояние надписи кнопки попапа Аватар
   const [isTextAvatarPopupBtn, setTextAvatarPopupBtn] = React.useState("Сохранить");
   //Изначальное состояние надписи кнопки попапа Редактирования профиля
@@ -142,7 +141,7 @@ function App() {
   //Функция открытия попапа Удаление карточки
   function handleDeleteCardClick(card) {
     setDeleteCardPopupOpen(true);
-    setCurrentDeleteCards(card);
+    setCurrentDeleteCard(card);
   }
 
   //Закрытие попапов
@@ -156,6 +155,7 @@ function App() {
   }
 
   React.useEffect(() => {
+    setIsLoggedIn(true);
     api
       .getUserInfo()
       .then((user) => {
@@ -164,6 +164,7 @@ function App() {
       .catch((err) => {
         console.error(err);
       });
+    setIsLoggedIn(true);
     api
       .getInitialCards()
       .then((card) => {
@@ -171,6 +172,9 @@ function App() {
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setIsLoggedIn(false);
       });
   }, []);
 
@@ -363,7 +367,7 @@ function App() {
             isOpen={isDeleteCardPopupOpen}
             onClose={closeAllPopups}
             onCardDelete={handleCardDelete}
-            cardObj={currentDeleteCards}
+            cardObj={currentDeleteCard}
           ></DeleteCardPopup>
 
           <InfoTooltip
