@@ -173,6 +173,7 @@ function App() {
           console.error(err);
         });
     }
+    return;
   }, [isLoggedIn]);
 
   function handleCardDelete(cards) {
